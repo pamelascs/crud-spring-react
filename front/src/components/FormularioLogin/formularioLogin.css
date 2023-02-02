@@ -1,0 +1,21 @@
+form{
+
+    margin-top: 300px;
+    width: 500px;
+    margin-left: 300px;
+    text-align: left;
+    
+  
+  }
+  
+form input{
+    margin-bottom: 5px;
+  }
+  
+ form input[type='button']{
+    margin-right: 10px;
+  }
+
+  label {
+    margin-top: 10px;
+  }

@@ -6,7 +6,7 @@ function Tabela({vetor, selecionar}){
                 <tr>
                     <th>#</th>
                     <th>Nome</th>
-                    <th>#</th>
+                    <th>E-mail</th>
                 </tr>
             </thead>
             <tbody>
@@ -14,8 +14,8 @@ function Tabela({vetor, selecionar}){
                     vetor.map((obj, indice) => (
                         <tr key={indice}>
                             <td>{indice+1}</td>
-                            <td>{obj.dados_basicos}</td>
-                            <td>{obj.beneficios}</td>
+                            <td>{obj.nome}</td>
+                            <td>{obj.email}</td>
                             <td><button onClick={() => {selecionar(indice)}} className="btn btn-success">Selecionar</button></td>
                         </tr>
                     ))

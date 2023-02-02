@@ -1,47 +1,55 @@
 import React, {useEffect, useState} from 'react';
 
-import './App.css';
-import Formulario from './Formulario';
-import Tabela from './Tabela';
+import Cabecalho from '../../components/Cabecalho';
+import FormularioCadastro from '../../components/FormularioCadastro';
+
+import Tabela from '../../Tabela';
 
 
 
-
-function App(){
+function Cadastrar(){
   
 
-    // Objeto projeto
-    const projeto = {
-      dadosBasicos :0,
-      beneficios : '',
-      justificativa : ''
+    // Objeto usuario
+    const usuario = {
+      nome :0,
+      dataNasc : '',
+      telefone : '',
+      cpf : '',
+      endereco : '',
+      email : '',
+      setor : '',
+      nomeLogin : '',
+      senha : '',
+      tipoPerfil : ''
+
     }
   
     // UseState
     const [btnCadastrar, setBtnCadastrar] = useState(true);
-    const [projetos, setProjetos] = useState([]);
-    const [objProjeto, setObjProjeto] = useState(projeto);
+    const [usuarios, setUsuario] = useState([]);
+    const [objUsuario, setObjUsuario] = useState(usuario);
 
     // UseEffect
     useEffect(()=>{
-      fetch("http://localhost:8080/listar")
+      fetch("http://localhost:8080/listarUsuario")
       .then(retorno => retorno.json())
-      .then(retorno_convertido => setProjetos(retorno_convertido));
+      .then(retorno_convertido => setUsuario(retorno_convertido));
     }, []);
 
 
     // Obtendo dados do formulario
 
     const aoDigitar = (e) => {
-      setObjProjeto({...objProjeto, [e.target.name]:e.target.value});
+      setObjUsuario({...objUsuario, [e.target.name]:e.target.value});
     }
 
 
     // cadastrar projeto
     const cadastrar = () => {
-      fetch('http://localhost:8080/cadastrar', {
+      fetch('http://localhost:8080/cadastrarUsuario', {
         method:'post',
-        body:JSON.stringify(objProjeto),
+        body:JSON.stringify(objUsuario),
         headers:{
           'Content-type':'application/json',
           'Accept':'application/json'
@@ -53,8 +61,8 @@ function App(){
         if(retorno_convertido.mensagem !==undefined){
           alert(retorno_convertido.mensagem);
         }else{
-          setProjetos([...projetos, retorno_convertido]);
-          alert('Produto cadastrado com sucesso');
+          setUsuario([...usuarios, retorno_convertido]);
+          alert('Usuário cadastrado com sucesso');
           limparFormulario();
         }
       })
@@ -62,9 +70,9 @@ function App(){
 
     // editar projeto
     const editar = () => {
-      fetch('http://localhost:8080/editar', {
+      fetch('http://localhost:8080/editarUsuario', {
         method:'put',
-        body:JSON.stringify(objProjeto),
+        body:JSON.stringify(objUsuario),
         headers:{
           'Content-type':'application/json',
           'Accept':'application/json'
@@ -80,28 +88,28 @@ function App(){
           alert('Produto alterado com sucesso');
 
           // Copia do vetor dos produtos
-        let vetorTemp = [...projetos];
+        let vetorTemp = [...usuarios];
 
         // Indice 
         let indice = vetorTemp.findIndex((p) =>{
-          return p.codigo === objProjeto.codigo;
+          return p.idUsuario === objUsuario.idUsuario;
         });
 
         // Editar produto do vetor Temp
-        vetorTemp[indice] = objProjeto;
+        vetorTemp[indice] = objUsuario;
 
         // Atalizar o vetor de produtos
-        setProjetos(vetorTemp);
+        setUsuario(vetorTemp);
 
         // Limpar formulario
-          limparFormulario();
+        limparFormulario();
         }
       })
     }
 
     // Remover projeto
     const remover = () => {
-      fetch('http://localhost:8080/remover/'+objProjeto.codigo, {
+      fetch('http://localhost:8080/removerUsuario/'+objUsuario.idUsuario, {
         method:'delete',
         headers:{
           'Content-type':'application/json',
@@ -115,18 +123,18 @@ function App(){
         alert(retorno_convertido.mensagem);
 
         // Copia do vetor dos produtos
-        let vetorTemp = [...projetos];
+        let vetorTemp = [...usuarios];
 
         // Indice 
         let indice = vetorTemp.findIndex((p) =>{
-          return p.codigo === objProjeto.codigo;
+          return p.idUsuario === objUsuario.idUsuario;
         });
 
         // Remover produto do vetor Temp
         vetorTemp.splice(indice, 1);
 
         // Atalizar o vetor de produtos
-        setProjetos(vetorTemp);
+        setUsuario(vetorTemp);
 
         //Limpar formulario
         limparFormulario();
@@ -136,15 +144,15 @@ function App(){
 
     // Limpar formulario 
     const limparFormulario = () => {
-      setObjProjeto(projeto);
+      setObjUsuario(usuario);
       setBtnCadastrar(true);
     }
 
 
 
     // Selecionar produto
-    const selecionarProjeto = (indice) => {
-      setObjProjeto(projetos[indice]);
+    const selecionarUsuario = (indice) => {
+      setObjUsuario(usuarios[indice]);
       setBtnCadastrar(false);
     }
      
@@ -153,8 +161,9 @@ function App(){
     //retorno
     return (
       <div>
-        <Formulario botao={btnCadastrar} eventoTeclado={aoDigitar} cadastrar={cadastrar} obj={objProjeto} cancelar={limparFormulario} remover={remover} editar={editar} />
-        <Tabela vetor={projetos} selecionar={selecionarProjeto} />
+        <Cabecalho />
+        <FormularioCadastro botao={btnCadastrar} eventoTeclado={aoDigitar} cadastrar={cadastrar} obj={objUsuario} cancelar={limparFormulario} remover={remover} editar={editar} />
+        <Tabela vetor={usuarios} selecionar={selecionarUsuario} />
       </div>
       
      
@@ -162,4 +171,4 @@ function App(){
   
 }
 
-export default App;
+export default Cadastrar;
